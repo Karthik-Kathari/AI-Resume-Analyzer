@@ -6,7 +6,6 @@ import ScoreCard from '../components/Results/ScoreCard';
 import KeywordChips from '../components/Results/KeywordChips';
 import Suggestions from '../components/Results/Suggestions';
 import logoImg from '../assets/logo.png';
-import iconImg from '../assets/icon.png';
 
 const SAMPLE_JD = `Full Stack Engineer (Node.js & React)
 We are seeking an experienced Full Stack Engineer to scale our SaaS platform.
@@ -88,14 +87,8 @@ const DashboardPage = () => {
       {/* Top Navbar */}
       <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src={iconImg} alt="ResumeIQ Icon" className="w-9 h-9 rounded-xl object-contain shadow-md shadow-indigo-500/20" />
-            <div className="bg-white/95 rounded-xl px-2.5 py-1 shadow-sm border border-white/20 flex items-center">
-              <img src={logoImg} alt="ResumeIQ Logo" className="h-6 w-auto object-contain" />
-            </div>
-            <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 hidden sm:inline-block">
-              ATS Pro
-            </span>
+          <div className="flex items-center cursor-pointer" onClick={() => navigate('/dashboard')}>
+            <img src={logoImg} alt="ResumeIQ" className="h-8 sm:h-9 w-auto object-contain" />
           </div>
 
           <div className="flex items-center gap-4">

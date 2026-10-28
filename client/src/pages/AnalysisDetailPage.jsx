@@ -5,7 +5,6 @@ import ScoreCard from '../components/Results/ScoreCard';
 import KeywordChips from '../components/Results/KeywordChips';
 import Suggestions from '../components/Results/Suggestions';
 import logoImg from '../assets/logo.png';
-import iconImg from '../assets/icon.png';
 
 const AnalysisDetailPage = () => {
   const { id } = useParams();
@@ -48,8 +47,8 @@ const AnalysisDetailPage = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="bg-white/95 rounded-xl px-2.5 py-1 shadow-sm border border-white/20 hidden sm:flex items-center">
-              <img src={logoImg} alt="ResumeIQ Logo" className="h-5 w-auto object-contain" />
+            <div className="cursor-pointer hidden sm:block" onClick={() => navigate('/dashboard')}>
+              <img src={logoImg} alt="ResumeIQ Logo" className="h-7 w-auto object-contain" />
             </div>
             <button
               onClick={() => navigate('/dashboard')}
