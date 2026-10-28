@@ -38,12 +38,17 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: expres
 });
 
 // ─── Start ────────────────────────────────────────────────────────────────────
-const start = async () => {
+export const start = async () => {
   await connectDB();
-  app.listen(env.PORT, () => {
+  return app.listen(env.PORT, () => {
     console.log(`🚀 Server running on http://localhost:${env.PORT}`);
     console.log(`📦 Environment: ${env.NODE_ENV}`);
   });
 };
 
-start();
+if (process.env.NODE_ENV !== 'test') {
+  start();
+}
+
+export default app;
+
