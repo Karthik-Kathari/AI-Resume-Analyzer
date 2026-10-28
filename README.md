@@ -1,81 +1,100 @@
 # AI Resume Analyzer
 
-> Upload your resume PDF + paste a job description → get a match score, keyword gaps, and actionable suggestions instantly.
+Upload a resume (PDF) and a job description — get back a match score, missing keywords, and suggestions on what to improve.
 
-## 🚀 Live Demo
-- **Frontend:** [Vercel URL here]
-- **API:** [Render URL here]
+Built with React, Node/Express (TypeScript), and MongoDB. Auth uses JWT with access tokens stored in memory and refresh tokens in httpOnly cookies. The analyzer is rule-based by default and switches to Gemini API automatically when a key is provided.
 
-## ✨ Features
-- 📄 PDF resume upload with drag & drop
-- 🤖 Rule-based keyword match engine (Gemini API ready — just add key)
-- 📊 Match score ring, matched/missing keyword chips, suggestions
-- 🔐 JWT auth (access token in memory + refresh token in httpOnly cookie)
-- 📜 Full analysis history with delete
-- 🐳 Docker ready
+**Live demo:** coming soon
 
-## 🛠 Tech Stack
-| Layer | Tech |
-|-------|------|
-| Frontend | React, Vite, Tailwind CSS |
-| Backend | Node.js, Express, TypeScript |
-| Database | MongoDB Atlas |
-| Auth | JWT (access + refresh tokens) |
-| PDF | pdf-parse, Multer |
-| Deploy | Vercel (FE) + Render (BE) |
+---
 
-## ⚡ Local Setup
+## Stack
 
-### Prerequisites
-- Node.js 18+
-- MongoDB Atlas free cluster ([create here](https://cloud.mongodb.com))
+- **Frontend** — React, Vite, Tailwind CSS
+- **Backend** — Node.js, Express, TypeScript
+- **Database** — MongoDB Atlas
+- **Auth** — JWT (access + refresh token rotation)
+- **PDF parsing** — Multer + pdf-parse
 
-### 1. Clone
+---
+
+## Getting Started
+
+You need Node.js 18+ and a [MongoDB Atlas](https://cloud.mongodb.com) free cluster.
+
 ```bash
 git clone https://github.com/Karthik-Kathari/AI-Resume-Analyzer.git
 cd AI-Resume-Analyzer
 ```
 
-### 2. Server
+**Server**
+
 ```bash
 cd server
-cp .env.example .env
-# Fill in MONGODB_URI and JWT secrets in .env
+cp .env.example .env   # fill in the values (see below)
 npm install
-npm run dev
+npm run dev            # runs on http://localhost:5000
 ```
 
-### 3. Client
+**Client**
+
 ```bash
 cd client
 npm install
-npm run dev
+npm run dev            # runs on http://localhost:5173
 ```
 
-Open http://localhost:5173
+---
 
-## 🔐 Environment Variables
+## Environment Variables
 
-### Server (`server/.env`)
-| Variable | Description |
-|----------|-------------|
-| `MONGODB_URI` | MongoDB Atlas connection string |
-| `JWT_ACCESS_SECRET` | Min 32-char secret for access tokens |
-| `JWT_REFRESH_SECRET` | Min 32-char secret for refresh tokens |
-| `CLIENT_URL` | Frontend URL (for CORS) |
-| `GEMINI_API_KEY` | Optional — activates AI analysis |
+Copy `server/.env.example` to `server/.env` and fill in:
 
-## 🤖 Enabling Gemini AI
-1. Get a free key from [Google AI Studio](https://aistudio.google.com)
-2. Add `GEMINI_API_KEY=your_key` to `server/.env`
-3. Restart server — AI mode activates automatically
+```env
+MONGODB_URI=           # your Atlas connection string
+JWT_ACCESS_SECRET=     # any random string, min 32 chars
+JWT_REFRESH_SECRET=    # different random string, min 32 chars
+CLIENT_URL=http://localhost:5173
+GEMINI_API_KEY=        # optional — leave blank to use rule-based mode
+```
 
-## 📁 Project Structure
+To generate strong secrets quickly:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+---
+
+## Gemini AI Mode
+
+The analyzer works out of the box without any API key using a rule-based keyword matching engine. To enable AI-powered analysis, get a free key from [Google AI Studio](https://aistudio.google.com), add it to `.env`, and restart the server. No code changes needed — the server detects the key and switches modes automatically.
+
+---
+
+## Project Structure
+
 ```
 AI-Resume-Analyzer/
-├── client/          # React + Vite + Tailwind
-└── server/          # Node + Express + TypeScript
+├── client/            React frontend
+│   └── src/
+│       ├── api/       axios instance + API helpers
+│       ├── components/
+│       ├── context/   AuthContext (JWT handling)
+│       └── pages/
+└── server/            Node/Express backend
+    └── src/
+        ├── config/    DB connection, env validation
+        ├── controllers/
+        ├── middleware/ JWT auth, file upload
+        ├── models/    User, Analysis (Mongoose)
+        ├── routes/
+        ├── services/  analyzer engine, Gemini stub
+        └── utils/     token helpers, PDF parser
 ```
 
-## 📄 License
+---
+
+## License
+
 MIT
