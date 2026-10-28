@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import logoImg from '../assets/logo.png';
+import iconImg from '../assets/icon.png';
 
 const RegisterPage = () => {
   const { register } = useAuth();
@@ -34,8 +36,9 @@ const RegisterPage = () => {
 
       <div className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center mx-auto shadow-xl shadow-indigo-500/30 mb-3.5">
-            <span className="text-white font-black text-2xl">R</span>
+          <div className="inline-flex items-center gap-2.5 bg-white/95 rounded-2xl p-2 px-4 shadow-xl shadow-indigo-500/10 border border-white/20 mb-4">
+            <img src={iconImg} alt="ResumeIQ Icon" className="w-8 h-8 rounded-lg object-contain" />
+            <img src={logoImg} alt="ResumeIQ Logo" className="h-7 w-auto object-contain" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
             Create your account

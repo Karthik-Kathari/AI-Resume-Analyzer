@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { analysisAPI } from '../api';
 import { useAuth } from '../context/AuthContext';
+import logoImg from '../assets/logo.png';
+import iconImg from '../assets/icon.png';
 
 const HistoryPage = () => {
   const { user, logout } = useAuth();
@@ -57,10 +59,10 @@ const HistoryPage = () => {
       <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/dashboard')}>
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-bold text-white shadow-md shadow-indigo-500/20">
-              R
+            <img src={iconImg} alt="ResumeIQ" className="w-8 h-8 rounded-lg object-contain shadow-md shadow-indigo-500/20" />
+            <div className="bg-white/95 rounded-xl px-2.5 py-1 shadow-sm border border-white/20 flex items-center">
+              <img src={logoImg} alt="ResumeIQ Logo" className="h-5 w-auto object-contain" />
             </div>
-            <span className="font-bold text-white tracking-tight">ResumeIQ</span>
           </div>
 
           <div className="flex items-center gap-4">
