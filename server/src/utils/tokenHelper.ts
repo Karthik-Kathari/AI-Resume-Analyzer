@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { env } from '../config/env';
 
 interface TokenPayload {
@@ -6,15 +6,13 @@ interface TokenPayload {
 }
 
 export const signAccessToken = (userId: string): string => {
-  return jwt.sign({ userId }, env.JWT_ACCESS_SECRET, {
-    expiresIn: env.JWT_ACCESS_EXPIRES_IN as string,
-  });
+  const options: SignOptions = { expiresIn: env.JWT_ACCESS_EXPIRES_IN as SignOptions['expiresIn'] };
+  return jwt.sign({ userId }, env.JWT_ACCESS_SECRET, options);
 };
 
 export const signRefreshToken = (userId: string): string => {
-  return jwt.sign({ userId }, env.JWT_REFRESH_SECRET, {
-    expiresIn: env.JWT_REFRESH_EXPIRES_IN as string,
-  });
+  const options: SignOptions = { expiresIn: env.JWT_REFRESH_EXPIRES_IN as SignOptions['expiresIn'] };
+  return jwt.sign({ userId }, env.JWT_REFRESH_SECRET, options);
 };
 
 export const verifyAccessToken = (token: string): TokenPayload => {
