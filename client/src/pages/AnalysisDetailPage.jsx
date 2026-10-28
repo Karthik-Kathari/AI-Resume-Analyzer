@@ -32,7 +32,7 @@ const AnalysisDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
-      <header className="border-b border-white/10 bg-slate-900/60 backdrop-blur-2xl shadow-lg shadow-black/20 sticky top-0 z-50">
+      <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
@@ -47,10 +47,8 @@ const AnalysisDetailPage = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="cursor-pointer hidden sm:block group" onClick={() => navigate('/dashboard')}>
-              <div className="bg-white/90 hover:bg-white backdrop-blur-xl border border-white/40 px-3 py-1 rounded-xl shadow-md shadow-indigo-500/10 transition-all duration-200">
-                <img src={logoImg} alt="ResumeIQ Logo" className="h-5 sm:h-6 w-auto object-contain" />
-              </div>
+            <div className="cursor-pointer hidden sm:block" onClick={() => navigate('/dashboard')}>
+              <img src={logoImg} alt="ResumeIQ Logo" className="h-7 w-auto object-contain" />
             </div>
             <button
               onClick={() => navigate('/dashboard')}

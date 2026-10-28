@@ -54,13 +54,11 @@ const HistoryPage = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
-      {/* Navbar with Rich Glassmorphism */}
-      <header className="border-b border-white/10 bg-slate-900/60 backdrop-blur-2xl shadow-lg shadow-black/20 sticky top-0 z-50">
+      {/* Navbar */}
+      <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center cursor-pointer group" onClick={() => navigate('/dashboard')}>
-            <div className="bg-white/90 hover:bg-white backdrop-blur-xl border border-white/40 px-3.5 py-1.5 rounded-xl shadow-md shadow-indigo-500/10 transition-all duration-200">
-              <img src={logoImg} alt="ResumeIQ" className="h-6 sm:h-7 w-auto object-contain" />
-            </div>
+          <div className="flex items-center cursor-pointer" onClick={() => navigate('/dashboard')}>
+            <img src={logoImg} alt="ResumeIQ" className="h-8 w-auto object-contain" />
           </div>
 
           <div className="flex items-center gap-4">
