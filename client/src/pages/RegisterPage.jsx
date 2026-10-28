@@ -35,8 +35,10 @@ const RegisterPage = () => {
 
       <div className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
-          <div className="flex justify-center mb-5">
-            <img src={logoImg} alt="ResumeIQ Logo" className="h-10 sm:h-12 w-auto object-contain" />
+          <div className="flex justify-center mb-6">
+            <div className="bg-white/90 hover:bg-white backdrop-blur-xl border border-white/40 px-4 py-2 rounded-2xl shadow-xl shadow-indigo-500/10 inline-block transition-all duration-200">
+              <img src={logoImg} alt="ResumeIQ Logo" className="h-8 sm:h-9 w-auto object-contain" />
+            </div>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
             Create your account
