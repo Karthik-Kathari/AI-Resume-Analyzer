@@ -66,7 +66,12 @@ const AnalysisDetailPage = () => {
           </p>
         </div>
 
-        <ScoreCard score={analysis.matchScore} />
+        <ScoreCard
+          score={analysis.matchScore}
+          analysisMode={analysis.analysisMode}
+          breakdown={analysis.breakdown}
+          disclaimer={analysis.disclaimer}
+        />
         <KeywordChips matched={analysis.matchedKeywords} missing={analysis.missingKeywords} />
         <Suggestions suggestions={analysis.suggestions} />
 

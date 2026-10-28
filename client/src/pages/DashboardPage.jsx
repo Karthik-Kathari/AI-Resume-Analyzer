@@ -301,7 +301,12 @@ const DashboardPage = () => {
               </button>
             </div>
 
-            <ScoreCard score={result.matchScore} />
+            <ScoreCard
+              score={result.matchScore}
+              analysisMode={result.analysisMode}
+              breakdown={result.breakdown}
+              disclaimer={result.disclaimer}
+            />
             <KeywordChips matched={result.matchedKeywords} missing={result.missingKeywords} />
             <Suggestions suggestions={result.suggestions} />
           </div>

@@ -1,5 +1,11 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
+export interface IScoreBreakdown {
+  totalKeywords: number;
+  matchedCount: number;
+  missingCount: number;
+}
+
 export interface IAnalysis extends Document {
   userId: mongoose.Types.ObjectId;
   resumeText: string;
@@ -8,6 +14,9 @@ export interface IAnalysis extends Document {
   matchedKeywords: string[];
   missingKeywords: string[];
   suggestions: string[];
+  analysisMode: 'rule-based' | 'ai-enhanced';
+  breakdown: IScoreBreakdown;
+  disclaimer: string;
   createdAt: Date;
 }
 
@@ -20,6 +29,22 @@ const AnalysisSchema = new Schema<IAnalysis>(
     matchedKeywords: [{ type: String }],
     missingKeywords: [{ type: String }],
     suggestions: [{ type: String }],
+    analysisMode: {
+      type: String,
+      enum: ['rule-based', 'ai-enhanced'],
+      default: 'rule-based',
+      required: true,
+    },
+    breakdown: {
+      totalKeywords: { type: Number, default: 0 },
+      matchedCount: { type: Number, default: 0 },
+      missingCount: { type: Number, default: 0 },
+    },
+    disclaimer: {
+      type: String,
+      default:
+        'This score reflects keyword relevance analysis between the submitted resume and job description. It does not predict or guarantee actual employer ATS screening or hiring outcomes.',
+    },
   },
   { timestamps: true }
 );
