@@ -1,0 +1,134 @@
+# ============================================================
+# Node / npm
+# ============================================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.pnp
+.pnp.js
+
+# ============================================================
+# Build output
+# ============================================================
+dist/
+build/
+out/
+.next/
+.nuxt/
+.output/
+.cache/
+*.tsbuildinfo
+
+# ============================================================
+# Environment & secrets  ← NEVER commit these
+# ============================================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+secrets/
+
+# ============================================================
+# AI Coding Tools — zero attribution on GitHub
+# ============================================================
+# Antigravity / Google Gemini CLI
+.gemini/
+.agy/
+brain/
+.antigravity/
+antigravity/
+
+# GitHub Copilot
+.github/copilot-instructions.md
+.copilot/
+
+# Cursor IDE
+.cursor/
+.cursorignore
+.cursorindexingignore
+.cursorrules
+
+# Windsurf / Codeium
+.windsurf/
+.codeium/
+
+# Tabnine
+.tabnine/
+
+# Cody (Sourcegraph)
+.cody/
+
+# Aider
+.aider*
+.aider.chat.history.md
+.aider.conf.yml
+.aider.input.history
+aider.conf.yml
+CONVENTIONS.md
+
+# Continue.dev
+.continue/
+
+# Supermaven
+.supermaven/
+
+# Amazon CodeWhisperer / Q
+.aws-q/
+
+# JetBrains AI
+.idea/ai/
+
+# General AI assistant traces
+.ai/
+.llm/
+ai-context/
+ai-notes/
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+COPILOT.md
+
+# ============================================================
+# OS files
+# ============================================================
+.DS_Store
+Thumbs.db
+desktop.ini
+*.lnk
+
+# ============================================================
+# Editor & IDE (keep these local, not on GitHub)
+# ============================================================
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ============================================================
+# Logs & temp
+# ============================================================
+logs/
+*.log
+tmp/
+temp/
+.tmp/
+uploads/           # local file uploads during dev
+coverage/          # test coverage reports
+.nyc_output/
+
+# ============================================================
+# Docker
+# ============================================================
+*.env.docker
