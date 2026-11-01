@@ -3,10 +3,12 @@ import { User } from '../models/User.model';
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from '../utils/tokenHelper';
 import { env } from '../config/env';
 
+const isProduction = env.NODE_ENV === 'production';
+
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: env.NODE_ENV === 'production',
-  sameSite: 'strict' as const,
+  secure: isProduction,
+  sameSite: (isProduction ? 'none' : 'lax') as 'none' | 'lax',
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
 };
 
@@ -101,6 +103,10 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
     await User.findOneAndUpdate({ refreshToken: token }, { refreshToken: null });
   }
 
-  res.clearCookie('refreshToken', { httpOnly: true, secure: env.NODE_ENV === 'production' });
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax',
+  });
   res.json({ success: true, message: 'Logged out successfully' });
 };
