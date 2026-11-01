@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { analysisAPI } from '../api';
 import { useAuth } from '../context/AuthContext';
+import logoImg from '../assets/logo.png';
 
 const HistoryPage = () => {
   const { user, logout } = useAuth();
@@ -56,11 +57,8 @@ const HistoryPage = () => {
       {/* Navbar */}
       <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/dashboard')}>
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-bold text-white shadow-md shadow-indigo-500/20">
-              R
-            </div>
-            <span className="font-bold text-white tracking-tight">ResumeIQ</span>
+          <div className="flex items-center cursor-pointer" onClick={() => navigate('/dashboard')}>
+            <img src={logoImg} alt="ResumeIQ" className="h-8 w-auto object-contain" />
           </div>
 
           <div className="flex items-center gap-4">
@@ -132,6 +130,7 @@ const HistoryPage = () => {
                 <thead>
                   <tr className="border-b border-slate-800 bg-slate-900/80 text-slate-400 text-[11px] uppercase tracking-wider">
                     <th className="py-3.5 px-4 font-semibold">Match Score</th>
+                    <th className="py-3.5 px-4 font-semibold">Engine</th>
                     <th className="py-3.5 px-4 font-semibold">Matched</th>
                     <th className="py-3.5 px-4 font-semibold">Missing</th>
                     <th className="py-3.5 px-4 font-semibold">Timestamp</th>
@@ -149,6 +148,19 @@ const HistoryPage = () => {
                         <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold border ${getScoreBadge(item.matchScore)}`}>
                           {item.matchScore}%
                         </span>
+                      </td>
+                      <td className="py-4 px-4">
+                        {item.analysisMode === 'ai-enhanced' ? (
+                          <span className="inline-flex items-center gap-1 text-[11px] font-medium text-violet-300 bg-violet-500/10 border border-violet-500/20 px-2 py-0.5 rounded-full">
+                            <span className="w-1.5 h-1.5 rounded-full bg-violet-400"></span>
+                            AI
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                            Zero-Cost
+                          </span>
+                        )}
                       </td>
                       <td className="py-4 px-4 text-emerald-400 font-medium">
                         {item.matchedKeywords?.length || 0} skills

@@ -5,6 +5,7 @@ import { analysisAPI } from '../api';
 import ScoreCard from '../components/Results/ScoreCard';
 import KeywordChips from '../components/Results/KeywordChips';
 import Suggestions from '../components/Results/Suggestions';
+import logoImg from '../assets/logo.png';
 
 const SAMPLE_JD = `Full Stack Engineer (Node.js & React)
 We are seeking an experienced Full Stack Engineer to scale our SaaS platform.
@@ -86,18 +87,8 @@ const DashboardPage = () => {
       {/* Top Navbar */}
       <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/25">
-              <span className="text-white font-black text-lg">R</span>
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-white tracking-tight text-base">ResumeIQ</span>
-                <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                  ATS Pro
-                </span>
-              </div>
-            </div>
+          <div className="flex items-center cursor-pointer" onClick={() => navigate('/dashboard')}>
+            <img src={logoImg} alt="ResumeIQ" className="h-8 sm:h-9 w-auto object-contain" />
           </div>
 
           <div className="flex items-center gap-4">
@@ -301,7 +292,12 @@ const DashboardPage = () => {
               </button>
             </div>
 
-            <ScoreCard score={result.matchScore} />
+            <ScoreCard
+              score={result.matchScore}
+              analysisMode={result.analysisMode}
+              breakdown={result.breakdown}
+              disclaimer={result.disclaimer}
+            />
             <KeywordChips matched={result.matchedKeywords} missing={result.missingKeywords} />
             <Suggestions suggestions={result.suggestions} />
           </div>

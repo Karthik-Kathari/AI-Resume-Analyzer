@@ -3,21 +3,28 @@ import { env } from '../config/env';
 import type { AnalysisResult } from './analyzer.service';
 
 /**
- * Gemini AI Analyzer:
- * Analyzes resume text against the job description using Gemini models.
- * If the key is missing or an API error occurs, returns null so the system falls back seamlessly.
+ * Optional Gemini AI Analyzer:
+ * Only used if ENABLE_AI_ENHANCEMENT is explicitly set to true AND a valid Gemini API key is provided.
+ * If disabled, missing, rate-limited, or failed, returns null to fall back seamlessly to rule-based engine.
  */
 export const analyzeWithGemini = async (
   resumeText: string,
   jobDescription: string
 ): Promise<AnalysisResult | null> => {
-  if (!env.GEMINI_API_KEY || !env.GEMINI_API_KEY.trim()) {
+  // 1. Guard check: Must be explicitly enabled
+  if (!env.ENABLE_AI_ENHANCEMENT) {
+    return null;
+  }
+
+  // 2. Guard check: Key must exist and match Google AI Studio format
+  const apiKey = env.GEMINI_API_KEY?.trim();
+  if (!apiKey || !apiKey.startsWith('AIza')) {
+    console.warn('⚠️ Gemini AI is enabled in config, but GEMINI_API_KEY is not a valid Google AI Studio key.');
     return null;
   }
 
   try {
-    const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY);
-    // Use gemini-1.5-flash or gemini-2.0-flash for high speed & generous free quota
+    const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
     const prompt = `You are an expert technical recruiter and resume ATS analyzer.
@@ -29,18 +36,17 @@ ${jobDescription}
 Resume:
 ${resumeText}
 
-Respond ONLY with valid, raw JSON (no markdown formatting, no code fences like \`\`\`json) with this exact schema:
+Respond ONLY with valid raw JSON (no markdown formatting, no code fences like \`\`\`json) with this exact schema:
 {
-  "matchScore": <number between 0 and 100>,
-  "matchedKeywords": [<array of string skills/keywords found in both>],
-  "missingKeywords": [<array of important string skills/keywords from the job description missing from the resume>],
-  "suggestions": [<array of 3-5 concrete, actionable bullet points to improve the resume for this role>]
+  "matchScore": <integer between 0 and 100>,
+  "matchedKeywords": [<array of string technical skills/tools present in both>],
+  "missingKeywords": [<array of string technical skills/tools from the job description missing in the resume>],
+  "suggestions": [<array of 3-5 concrete actionable recommendations to improve resume impact for this role>]
 }`;
 
     const result = await model.generateContent(prompt);
     let responseText = result.response.text().trim();
 
-    // Remove any markdown code block fences if returned by the model
     if (responseText.startsWith('```json')) {
       responseText = responseText.replace(/^```json\s*/, '').replace(/\s*```$/, '');
     } else if (responseText.startsWith('```')) {
@@ -49,14 +55,27 @@ Respond ONLY with valid, raw JSON (no markdown formatting, no code fences like \
 
     const parsed = JSON.parse(responseText);
 
+    const matched = Array.isArray(parsed.matchedKeywords) ? parsed.matchedKeywords.map((k: any) => String(k).toLowerCase()) : [];
+    const missing = Array.isArray(parsed.missingKeywords) ? parsed.missingKeywords.map((k: any) => String(k).toLowerCase()) : [];
+    const total = matched.length + missing.length;
+    const score = Math.min(100, Math.max(0, Math.round(Number(parsed.matchScore) || (total > 0 ? (matched.length / total) * 100 : 0))));
+
     return {
-      matchScore: Math.min(100, Math.max(0, Math.round(Number(parsed.matchScore) || 0))),
-      matchedKeywords: Array.isArray(parsed.matchedKeywords) ? parsed.matchedKeywords : [],
-      missingKeywords: Array.isArray(parsed.missingKeywords) ? parsed.missingKeywords : [],
+      matchScore: score,
+      matchedKeywords: matched,
+      missingKeywords: missing,
       suggestions: Array.isArray(parsed.suggestions) ? parsed.suggestions : [],
+      analysisMode: 'ai-enhanced',
+      breakdown: {
+        totalKeywords: total,
+        matchedCount: matched.length,
+        missingCount: missing.length,
+      },
+      disclaimer:
+        'This score reflects AI-assisted semantic and keyword analysis. It is an algorithmic estimation and does not guarantee or predict actual employer ATS screening or hiring outcomes.',
     };
   } catch (error) {
-    console.warn('⚠️ Gemini analysis failed, falling back to rule-based engine:', (error as Error).message);
+    console.warn('⚠️ Gemini analysis call failed or rate-limited. Falling back to rule-based engine:', (error as Error).message);
     return null;
   }
 };

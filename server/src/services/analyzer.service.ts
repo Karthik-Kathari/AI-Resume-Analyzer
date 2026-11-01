@@ -215,6 +215,13 @@ export interface AnalysisResult {
   matchedKeywords: string[];
   missingKeywords: string[];
   suggestions: string[];
+  analysisMode: 'rule-based' | 'ai-enhanced';
+  breakdown: {
+    totalKeywords: number;
+    matchedCount: number;
+    missingCount: number;
+  };
+  disclaimer: string;
 }
 
 /**
@@ -255,6 +262,14 @@ export const analyzeResume = (resumeText: string, jobDescription: string): Analy
     matchedKeywords: matched,
     missingKeywords: missing,
     suggestions,
+    analysisMode: 'rule-based',
+    breakdown: {
+      totalKeywords: total,
+      matchedCount: matched.length,
+      missingCount: missing.length,
+    },
+    disclaimer:
+      'This score reflects keyword relevance analysis between the submitted resume and job description. It is an algorithmic estimation and does not guarantee or predict actual employer ATS screening or hiring outcomes.',
   };
 };
 

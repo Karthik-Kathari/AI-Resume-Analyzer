@@ -1,97 +1,91 @@
-# AI Resume Analyzer
+# ResumeIQ — ATS Resume Analyzer
 
-Upload a resume (PDF) and a job description — get back a match score, missing keywords, and suggestions on what to improve.
+Upload a resume PDF and a target job description to get an algorithmic match score, a breakdown of matched and missing skills, and actionable recommendations.
 
-Built with React, Node/Express (TypeScript), and MongoDB. Auth uses JWT with access tokens stored in memory and refresh tokens in httpOnly cookies. The analyzer is rule-based by default and switches to Gemini API automatically when a key is provided.
-
-**Live demo:** coming soon
+Built with React, Node.js/Express (TypeScript), and MongoDB Atlas. Features a **zero-cost-first architecture**: the core application operates entirely on an in-memory rule-based keyword matching engine with zero required third-party AI APIs or costs. Optional AI enhancement via Google Gemini can be toggled on server-side without altering client workflows or requiring user API keys.
 
 ---
 
-## Stack
+## Key Features
 
-- **Frontend** — React, Vite, Tailwind CSS
-- **Backend** — Node.js, Express, TypeScript
-- **Database** — MongoDB Atlas
-- **Auth** — JWT (access + refresh token rotation)
-- **PDF parsing** — Multer + pdf-parse
+- **Zero-Cost Rule-Based Matching:** Normalized tokenization with smart punctuation preservation (`Node.js`, `C++`, `React.js`, `.NET`, `CI/CD`), extensive English and job-filler stop-word filtering, and tech taxonomy matching.
+- **Transparent Scoring & Methodology:** Displays exact mathematical match ratios `(Matched Skills ÷ Required Skills) × 100` alongside an explicit scoring limitation disclaimer.
+- **Optional Server-Side AI Enhancement:** Can be toggled on with `ENABLE_AI_ENHANCEMENT=true` and a Gemini API key. Falls back to the rule-based engine automatically on missing keys, errors, or rate limits.
+- **Secure Authentication:** JWT authentication with access tokens stored in memory and refresh tokens stored in secure `httpOnly` cookies. Passwords hashed with `bcryptjs`.
+- **Data Isolation:** Enforces strict user ownership across all analysis and history endpoints.
+- **PDF Extraction:** Memory-buffered parsing via `multer` and `pdf-parse` without persisting raw files to disk.
 
 ---
 
-## Getting Started
+## Tech Stack
 
-You need Node.js 18+ and a [MongoDB Atlas](https://cloud.mongodb.com) free cluster.
+- **Frontend:** React, Vite, Tailwind CSS, Axios
+- **Backend:** Node.js, Express, TypeScript, Zod
+- **Database:** MongoDB Atlas (M0 Free Tier)
+- **Auth:** JWT (Access + Refresh Token rotation), bcryptjs
+- **Parsing:** Multer, pdf-parse
 
+---
+
+## Local Setup
+
+### Prerequisites
+- Node.js 18+
+- MongoDB Atlas free cluster
+
+### 1. Clone the repository
 ```bash
 git clone https://github.com/Karthik-Kathari/AI-Resume-Analyzer.git
 cd AI-Resume-Analyzer
 ```
 
-**Server**
-
+### 2. Configure & run backend
 ```bash
 cd server
-cp .env.example .env   # fill in the values (see below)
+cp .env.example .env
 npm install
-npm run dev            # runs on http://localhost:5000
+npm run dev
 ```
 
-**Client**
-
+### 3. Configure & run frontend
 ```bash
-cd client
+cd ../client
 npm install
-npm run dev            # runs on http://localhost:5173
+npm run dev
 ```
+
+Access the client at `http://localhost:5173`.
 
 ---
 
 ## Environment Variables
 
-Copy `server/.env.example` to `server/.env` and fill in:
-
+### Backend (`server/.env`)
 ```env
-MONGODB_URI=           # your Atlas connection string
-JWT_ACCESS_SECRET=     # any random string, min 32 chars
-JWT_REFRESH_SECRET=    # different random string, min 32 chars
+PORT=5000
+NODE_ENV=development
+MONGODB_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/resume-analyzer?retryWrites=true&w=majority
+JWT_ACCESS_SECRET=your_access_token_secret_min_32_chars
+JWT_REFRESH_SECRET=your_refresh_token_secret_min_32_chars
+JWT_ACCESS_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_IN=7d
 CLIENT_URL=http://localhost:5173
-GEMINI_API_KEY=        # optional — leave blank to use rule-based mode
+
+# Optional AI Enhancement (Default: disabled, ₹0 cost)
+ENABLE_AI_ENHANCEMENT=false
+GEMINI_API_KEY=
 ```
 
-To generate strong secrets quickly:
-
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+### Frontend (`client/.env`)
+```env
+VITE_API_URL=http://localhost:5000/api
 ```
 
 ---
 
-## Gemini AI Mode
+## Scoring Methodology & Limitations
 
-The analyzer works out of the box without any API key using a rule-based keyword matching engine. To enable AI-powered analysis, get a free key from [Google AI Studio](https://aistudio.google.com), add it to `.env`, and restart the server. No code changes needed — the server detects the key and switches modes automatically.
-
----
-
-## Project Structure
-
-```
-AI-Resume-Analyzer/
-├── client/            React frontend
-│   └── src/
-│       ├── api/       axios instance + API helpers
-│       ├── components/
-│       ├── context/   AuthContext (JWT handling)
-│       └── pages/
-└── server/            Node/Express backend
-    └── src/
-        ├── config/    DB connection, env validation
-        ├── controllers/
-        ├── middleware/ JWT auth, file upload
-        ├── models/    User, Analysis (Mongoose)
-        ├── routes/
-        ├── services/  analyzer engine, Gemini stub
-        └── utils/     token helpers, PDF parser
-```
+ResumeIQ calculates technical keyword alignment based on extracted terms from both the uploaded resume and the job description. The score is a preparation diagnostic and does not claim or guarantee actual candidate selection or ATS passage by specific corporate employers.
 
 ---
 
