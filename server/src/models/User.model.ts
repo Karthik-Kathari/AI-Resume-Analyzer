@@ -5,7 +5,14 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  refreshToken?: string;
+  refreshToken?: string | null;
+  isVerified: boolean;
+  otp?: string | null;
+  otpExpires?: Date | null;
+  otpType?: 'verification' | 'reset' | null;
+  lastOtpSentAt?: Date | null;
+  resetToken?: string | null;
+  resetTokenExpires?: Date | null;
   createdAt: Date;
   comparePassword(candidate: string): Promise<boolean>;
 }
@@ -16,6 +23,13 @@ const UserSchema = new Schema<IUser>(
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true, minlength: 6 },
     refreshToken: { type: String, default: null },
+    isVerified: { type: Boolean, default: false },
+    otp: { type: String, default: null },
+    otpExpires: { type: Date, default: null },
+    otpType: { type: String, enum: ['verification', 'reset', null], default: null },
+    lastOtpSentAt: { type: Date, default: null },
+    resetToken: { type: String, default: null },
+    resetTokenExpires: { type: Date, default: null },
   },
   { timestamps: true }
 );
@@ -32,12 +46,17 @@ UserSchema.methods.comparePassword = async function (candidate: string): Promise
   return bcrypt.compare(candidate, this.password);
 };
 
-// Never expose password in JSON output
+// Never expose password or security tokens in JSON output
 UserSchema.set('toJSON', {
   transform: (_doc, ret) => {
     const r = ret as unknown as Record<string, unknown>;
     delete r.password;
     delete r.refreshToken;
+    delete r.otp;
+    delete r.otpExpires;
+    delete r.otpType;
+    delete r.resetToken;
+    delete r.resetTokenExpires;
     return ret;
   },
 });

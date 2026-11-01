@@ -14,6 +14,12 @@ const envSchema = z.object({
   CLIENT_URL: z.string().default('http://localhost:5173'),
   ENABLE_AI_ENHANCEMENT: z.string().optional().default('false').transform(v => v.toLowerCase() === 'true'),
   GEMINI_API_KEY: z.string().optional(),
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.string().optional().default('587'),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
+  SMTP_SECURE: z.string().optional().default('false').transform(v => v.toLowerCase() === 'true'),
+  EMAIL_FROM: z.string().optional().default('ResumeIQ <no-reply@resumeiq.com>'),
 });
 
 const parsed = envSchema.safeParse(process.env);
