@@ -80,11 +80,24 @@ const LoginPage = () => {
       <div className="absolute top-0 inset-x-0 h-96 bg-radial-gradient pointer-events-none"></div>
 
       <div className="w-full max-w-md relative z-10">
+        {/* Top Back Link */}
+        <div className="mb-6 flex items-center justify-between">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-slate-400 hover:text-white transition-colors px-3 py-1.5 rounded-lg hover:bg-slate-900 border border-transparent hover:border-slate-800"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Homepage
+          </Link>
+        </div>
+
         {/* Brand Header */}
         <div className="text-center mb-8">
-          <div className="flex justify-center mb-5">
-            <img src={logoImg} alt="ResumeIQ Logo" className="h-10 sm:h-12 w-auto object-contain" />
-          </div>
+          <Link to="/" className="inline-flex justify-center mb-5 hover:opacity-85 transition-opacity">
+            <img src={logoImg} alt="ResumeIQ Logo" className="h-10 sm:h-12 w-auto object-contain cursor-pointer" />
+          </Link>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
             {needsVerification ? 'Verify your email' : 'Welcome back'}
           </h1>
