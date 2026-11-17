@@ -233,7 +233,7 @@ export default function HomePage() {
             : 'bg-slate-950/60 backdrop-blur-lg border-b border-white/5'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-18 flex items-center justify-between">
           {/* Logo & Brand Name */}
           <Link to="/" className="flex items-center gap-3 group focus:outline-none">
             <img
@@ -398,11 +398,11 @@ export default function HomePage() {
       {/* ─────────────────────────────────────────────────────────────
           3. Hero Section
       ───────────────────────────────────────────────────────────── */}
-      <section id="hero" className="relative pt-12 pb-20 sm:pt-20 sm:pb-28 overflow-hidden">
+      <section id="hero" className="relative pt-3 pb-16 sm:pt-6 sm:pb-24 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
             {/* Top Pill Badge with Smooth Glow */}
-            <div className="reveal inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 text-xs sm:text-sm font-medium mb-6 backdrop-blur-md shadow-sm shadow-indigo-500/10">
+            <div className="reveal inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 text-xs sm:text-sm font-medium mb-4 sm:mb-5 backdrop-blur-md shadow-sm shadow-indigo-500/10">
               <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
               <span>100% Free & Algorithmic ATS Optimization</span>
               <span className="text-slate-500">•</span>
