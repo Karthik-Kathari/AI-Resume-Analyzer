@@ -142,7 +142,7 @@ const RegisterPage = () => {
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   className="w-full bg-slate-900/60 border border-slate-800 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
-                  placeholder="Karthik K"
+                  placeholder="Your name"
                 />
               </div>
 
@@ -156,7 +156,7 @@ const RegisterPage = () => {
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   className="w-full bg-slate-900/60 border border-slate-800 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
-                  placeholder="karthik@gmail.com"
+                  placeholder="yourmail@gmail.com"
                 />
                 <span className="text-[11px] text-slate-500 mt-1 block">
                   A verification code will be sent. Temporary/disposable emails are blocked.
@@ -249,9 +249,8 @@ const RegisterPage = () => {
                   type="button"
                   disabled={cooldown > 0 || resending}
                   onClick={handleResend}
-                  className={`font-semibold ${
-                    cooldown > 0 ? 'text-slate-500 cursor-not-allowed' : 'text-indigo-400 hover:text-indigo-300 underline'
-                  }`}
+                  className={`font-semibold ${cooldown > 0 ? 'text-slate-500 cursor-not-allowed' : 'text-indigo-400 hover:text-indigo-300 underline'
+                    }`}
                 >
                   {cooldown > 0 ? `Resend Code (${cooldown}s)` : resending ? 'Sending...' : 'Resend Code'}
                 </button>
