@@ -233,13 +233,13 @@ export default function HomePage() {
             : 'bg-slate-950/60 backdrop-blur-lg border-b border-white/5'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           {/* Logo & Brand Name */}
           <Link to="/" className="flex items-center gap-3 group focus:outline-none">
             <img
               src={logoImg}
               alt="ResumeIQ"
-              className="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              className="h-8 sm:h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
             />
           </Link>
 
@@ -327,9 +327,9 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Mobile Dropdown Menu with Smooth Accordion */}
-        <div className={`accordion-wrapper md:hidden ${mobileMenuOpen ? 'open' : ''}`}>
-          <div className="accordion-inner glass-panel border-b border-slate-800 px-6 py-5 space-y-4">
+        {/* Mobile Dropdown Menu (Strictly Mobile Only, Never Leaks to Desktop) */}
+        {mobileMenuOpen && (
+          <div className="md:hidden glass-panel border-b border-slate-800 px-6 py-5 space-y-4 animate-fadeIn">
             <div className="flex flex-col space-y-3">
               {[
                 { label: 'Home', href: '#hero' },
@@ -392,7 +392,7 @@ export default function HomePage() {
               )}
             </div>
           </div>
-        </div>
+        )}
       </header>
 
       {/* ─────────────────────────────────────────────────────────────
