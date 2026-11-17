@@ -9,19 +9,32 @@ export const AuthProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : null;
   });
 
+  const setAuthSession = useCallback((accessToken, userData) => {
+    sessionStorage.setItem('accessToken', accessToken);
+    sessionStorage.setItem('user', JSON.stringify(userData));
+    setUser(userData);
+  }, []);
+
   const login = useCallback(async (email, password) => {
     const { data } = await authAPI.login({ email, password });
-    sessionStorage.setItem('accessToken', data.accessToken);
-    sessionStorage.setItem('user', JSON.stringify(data.user));
-    setUser(data.user);
-  }, []);
+    if (data.accessToken && data.user) {
+      setAuthSession(data.accessToken, data.user);
+    }
+    return data;
+  }, [setAuthSession]);
 
   const register = useCallback(async (name, email, password) => {
     const { data } = await authAPI.register({ name, email, password });
-    sessionStorage.setItem('accessToken', data.accessToken);
-    sessionStorage.setItem('user', JSON.stringify(data.user));
-    setUser(data.user);
+    return data;
   }, []);
+
+  const verifyEmail = useCallback(async (email, otp) => {
+    const { data } = await authAPI.verifyEmail({ email, otp });
+    if (data.accessToken && data.user) {
+      setAuthSession(data.accessToken, data.user);
+    }
+    return data;
+  }, [setAuthSession]);
 
   const logout = useCallback(async () => {
     await authAPI.logout().catch(() => {});
@@ -30,7 +43,17 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        register,
+        verifyEmail,
+        logout,
+        setAuthSession,
+        isAuthenticated: !!user,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

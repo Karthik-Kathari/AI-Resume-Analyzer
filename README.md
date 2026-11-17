@@ -8,6 +8,8 @@ Built with React, Node.js/Express (TypeScript), and MongoDB Atlas. Features a **
 
 ## Key Features
 
+- **Secure Authentication & Email Verification:** Mandates 6-digit OTP verification before account activation. Temporary/disposable email addresses are strictly blocked.
+- **Forgot Password & Password Reset:** 3-step secure password recovery flow utilizing email OTP verification and single-use time-bounded reset tokens.
 - **Zero-Cost Rule-Based Matching:** Normalized tokenization with smart punctuation preservation (`Node.js`, `C++`, `React.js`, `.NET`, `CI/CD`), extensive English and job-filler stop-word filtering, and tech taxonomy matching.
 - **Transparent Scoring & Methodology:** Displays exact mathematical match ratios `(Matched Skills ÷ Required Skills) × 100` alongside an explicit scoring limitation disclaimer.
 - **Optional Server-Side AI Enhancement:** Can be toggled on with `ENABLE_AI_ENHANCEMENT=true` and a Gemini API key. Falls back to the rule-based engine automatically on missing keys, errors, or rate limits.

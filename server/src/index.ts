@@ -9,9 +9,26 @@ import analysisRoutes from './routes/analysis.routes';
 const app = express();
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
+app.set('trust proxy', 1);
+
+const cleanClientUrl = env.CLIENT_URL ? env.CLIENT_URL.replace(/\/+$/, '') : '';
+
 app.use(cors({
-  origin: env.CLIENT_URL,
-  credentials: true, // allow cookies
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl, server-to-server)
+    if (!origin) return callback(null, true);
+
+    const cleanOrigin = origin.replace(/\/+$/, '');
+    if (
+      cleanOrigin === cleanClientUrl ||
+      cleanOrigin.endsWith('.vercel.app') ||
+      cleanOrigin.includes('localhost')
+    ) {
+      return callback(null, true);
+    }
+    return callback(new Error(`Not allowed by CORS: ${origin}`));
+  },
+  credentials: true, // allow cookies across origins
 }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
