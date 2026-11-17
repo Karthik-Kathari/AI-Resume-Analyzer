@@ -1,5 +1,12 @@
 import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import { env } from '../config/env';
+
+/**
+ * Creates Resend client if RESEND_API_KEY is provided.
+ * Uses HTTPS (Port 443) which is never blocked by cloud hosts like Render.
+ */
+const resendClient = env.RESEND_API_KEY ? new Resend(env.RESEND_API_KEY) : null;
 
 /**
  * Creates nodemailer transporter if SMTP configuration is provided.
@@ -122,31 +129,57 @@ export const sendPasswordResetEmail = async (email: string, otp: string, name: s
 const sendEmail = async (to: string, subject: string, html: string, text: string): Promise<boolean> => {
   const transporter = getTransporter();
 
-  // Always log in development or when SMTP is not configured
+  // Always log in development or when SMTP/Resend is not configured
   console.log(`\n======================================================`);
   console.log(`📧 [EMAIL NOTIFICATION] To: ${to}`);
   console.log(`📌 Subject: ${subject}`);
   console.log(`💬 Message: ${text}`);
   console.log(`======================================================\n`);
 
-  if (!transporter) {
-    // If SMTP credentials not provided, log and continue safely
-    return true;
+  // 1. Try Resend HTTP API first (port 443 - 100% works on Render & Cloud)
+  if (resendClient) {
+    try {
+      const fromAddress = env.EMAIL_FROM && !env.EMAIL_FROM.includes('no-reply@resumeiq.com')
+        ? env.EMAIL_FROM
+        : 'ResumeIQ <onboarding@resend.dev>';
+
+      const { data, error } = await resendClient.emails.send({
+        from: fromAddress,
+        to,
+        subject,
+        html,
+        text,
+      });
+
+      if (error) {
+        console.error(`❌ Resend API returned error for ${to}:`, error.message);
+      } else {
+        console.log(`✅ Email sent successfully via Resend API to ${to} (id: ${data?.id})`);
+        return true;
+      }
+    } catch (resendErr) {
+      console.error(`❌ Resend API request failed for ${to}:`, (resendErr as Error).message);
+    }
   }
 
-  try {
-    await transporter.sendMail({
-      from: env.EMAIL_FROM,
-      to,
-      subject,
-      text,
-      html,
-    });
-    console.log(`✅ Email sent successfully to ${to}`);
-    return true;
-  } catch (error) {
-    console.error(`❌ Failed to send email via SMTP to ${to}:`, (error as Error).message);
-    // Don't throw fatal error - return false or continue
-    return false;
+  // 2. Fall back to SMTP transporter if configured
+  if (transporter) {
+    try {
+      await transporter.sendMail({
+        from: env.EMAIL_FROM,
+        to,
+        subject,
+        text,
+        html,
+      });
+      console.log(`✅ Email sent successfully via SMTP to ${to}`);
+      return true;
+    } catch (error) {
+      console.error(`❌ Failed to send email via SMTP to ${to}:`, (error as Error).message);
+      return false;
+    }
   }
+
+  // If neither Resend nor SMTP is configured, local development log succeeded
+  return true;
 };
